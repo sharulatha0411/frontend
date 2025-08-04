@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Table Booking | Restaurant POS</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Animate on Scroll Library CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    body, html {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(45deg, #0b0c10, #1f1f1f);
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+
+    .booking-section {
+      padding: 100px 0;
+      background: url('./images/pexels-valeriya-842571.jpg') no-repeat center center/cover; /* Replace with your image path */
+      position: relative;
+    }
+    .booking-form {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 700px;
+      margin: auto;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+    }
+    .booking-form h2 {
+      color: #f9d423;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .form-select, .form-control {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+    }
+    
+    .form-control::placeholder {
+      color: #ccc;
+    }
+    .btn-custom {
+      background: linear-gradient(45deg, #f9d423, #ff4e50);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 30px;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+    }
+    .btn-custom:hover {
+      transform: scale(1.05);
+    }
+
+    /* Booking Summary Card */
+    .summary-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 50px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+    }
+    .summary-card h4 {
+      color: #f9d423;
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    footer {
+      background: #000;
+      color: #ccc;
+      padding: 60px 0 30px 0;
+      margin-top: 100px;
+    }
+    footer h5 {
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #f9d423;
+    }
+    footer a {
+      color: #ccc;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #f9d423;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Table Booking Section -->
+<section class="booking-section">
+  <div class="container">
+    <div class="booking-form" data-aos="zoom-in">
+      <h2>Book Your Table</h2>
+      <form action="#" method="POST" id="bookingForm">
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required>
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone Number</label>
+          <input type="tel" id="phone" name="phone" class="form-control" placeholder="Your phone number" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email (optional)</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="Your email">
+        </div>
+        <div class="mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="date" name="date" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="time" class="form-label">Time</label>
+          <input type="time" id="time" name="time" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="guests" class="form-label">Number of Guests</label>
+          <input type="number" id="guests" name="guests" class="form-control" placeholder="e.g. 4" required>
+        </div>
+        <div class="mb-3">
+          <label for="seating" class="form-label">Seating Preference</label>
+          <select id="seating" name="seating" class="form-select" required>
+            <option selected disabled>Select seating type</option>
+            <option value="Indoor">Indoor</option>
+            <option value="Outdoor">Outdoor</option>
+            <option value="Rooftop">Rooftop</option>
+          </select>    
+        </div>
+        <div class="mb-3">
+          <label for="requests" class="form-label">Special Requests</label>
+          <textarea id="requests" name="requests" class="form-control" rows="3" placeholder="Any special requests?"></textarea>
+        </div>
+        <div class="text-center">
+          <button type="button" onclick="showSummary()" class="btn btn-custom">Book Table</button>
+        </div>
+      </form>
+
+      <!-- Booking Summary Card -->
+      <div class="summary-card d-none" id="summaryCard" data-aos="fade-up">
+        <h4>Booking Summary</h4>
+        <p><strong>Name:</strong> <span id="summaryName"></span></p>
+        <p><strong>Phone:</strong> <span id="summaryPhone"></span></p>
+        <p><strong>Email:</strong> <span id="summaryEmail"></span></p>
+        <p><strong>Date:</strong> <span id="summaryDate"></span></p>
+        <p><strong>Time:</strong> <span id="summaryTime"></span></p>
+        <p><strong>Guests:</strong> <span id="summaryGuests"></span></p>
+        <p><strong>Seating:</strong> <span id="summarySeating"></span></p>
+        <p><strong>Requests:</strong> <span id="summaryRequests"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Animate on Scroll JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 1000 });
+
+  function showSummary() {
+    // Collect form values
+    const bookingData = {
+      name: document.getElementById("name").value,
+      phone: document.getElementById("phone").value,
+      email: document.getElementById("email").value || "N/A",
+      date: document.getElementById("date").value,
+      time: document.getElementById("time").value,
+      guests: document.getElementById("guests").value,
+      seating: document.getElementById("seating").value,
+      requests: document.getElementById("requests").value || "None"
+    };
+
+    // Save to localStorage
+    localStorage.setItem("latestBooking", JSON.stringify(bookingData));
+
+    // Also save into array of all bookings
+    const allBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    allBookings.push(bookingData);
+    localStorage.setItem("bookings", JSON.stringify(allBookings));
+
+    // Show summary in UI
+    document.getElementById("summaryName").innerText = bookingData.name;
+    document.getElementById("summaryPhone").innerText = bookingData.phone;
+    document.getElementById("summaryEmail").innerText = bookingData.email;
+    document.getElementById("summaryDate").innerText = bookingData.date;
+    document.getElementById("summaryTime").innerText = bookingData.time;
+    document.getElementById("summaryGuests").innerText = bookingData.guests;
+    document.getElementById("summarySeating").innerText = bookingData.seating;
+    document.getElementById("summaryRequests").innerText = bookingData.requests;
+
+    document.getElementById("summaryCard").classList.remove("d-none");
+    window.scrollTo({ top: document.getElementById("summaryCard").offsetTop - 100, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
